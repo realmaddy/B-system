@@ -4,8 +4,17 @@ import { useState } from "react";
 import { ArrowLeft, FilePlus2 } from "lucide-react";
 import Link from "next/link";
 
+interface RequestFormData {
+  badge: string;
+  assignedTo: string;
+  source: string;
+  note: string;
+  status: string;
+  reported: boolean;
+}
+
 export default function CreateRequestPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RequestFormData>({
     badge: "",
     assignedTo: "",
     source: "",
@@ -14,15 +23,24 @@ export default function CreateRequestPage() {
     reported: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  // ✅ Type-safe change handler
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+   const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+const { name, value, type } = target;
+
+setFormData((prev) => ({
+  ...prev,
+  [name]: type === "checkbox" ? (target as HTMLInputElement).checked : value,
+}));
+
   };
 
-  const handleSubmit = (e) => {
+  // ✅ Type-safe form submit handler
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Request Created:", formData);
     alert("✅ Request created successfully!");
@@ -58,7 +76,7 @@ export default function CreateRequestPage() {
           </label>
           <textarea
             name="badge"
-            rows="3"
+            rows={3}
             value={formData.badge}
             onChange={handleChange}
             className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none bg-white"
@@ -107,7 +125,7 @@ export default function CreateRequestPage() {
           </label>
           <textarea
             name="note"
-            rows="3"
+            rows={3}
             value={formData.note}
             onChange={handleChange}
             className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none bg-white"
