@@ -1,26 +1,127 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+input {
+  padding-left: 2.5rem !important; /* يخلي الأيقونة ما تدخلش على النص */
+}
 
+/* 🌤 المود الفاتح */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+
+  /* الخلفية العامة */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(13.142% 0.01177 284.657);
+
+  /* الكاردات والفورمات */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.005 280);
+
+  /* الحواف والحدود */
+  --border: oklch(0.9 0.01 280);
+  --ring: oklch(0.7 0.02 280);
+
+  /* اللون الأساسي */
+  --primary: oklch(0.63 0.25 290);
+  --primary-foreground: oklch(0.98 0 0);
+
+  /* الألوان الثانوية */
+  --accent: oklch(0.95 0.02 280);
+  --muted: oklch(0.94 0.015 280);
+
+  /* الألوان الخاصة بالـ inputs */
+  --input-bg: oklch(0.99 0 0);
+  --input-border: oklch(0.85 0.01 280);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* 🌑 المود الغامق */
+.dark {
+  /* 🖤 خلفية داكنة مريحة للعين */
+  --background: oklch(0.10 0.015 265); /* رمادي غامق مائل للأزرق */
+  --foreground: oklch(0.96 0.005 280);
+
+  /* 💳 الكاردات */
+  --card: oklch(0.14 0.015 265);
+  --card-foreground: oklch(0.98 0 0);
+
+  /* 🪞الحدود */
+  --border: oklch(0.22 0.01 265);
+  --ring: oklch(0.45 0.02 265);
+
+  /* 🎨 اللون الأساسي */
+  --primary: oklch(0.75 0.2 290);
+  --primary-foreground: oklch(0.1 0.01 265);
+
+  /* ✨ الألوان الثانوية */
+  --accent: oklch(0.25 0.03 275);
+  --muted: oklch(0.18 0.015 265);
+
+  /* 🧾 خلفية الـ inputs */
+  --input-bg: oklch(0.17 0.01 265);
+  --input-border: oklch(0.28 0.015 265);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 🧱 الأساسيات */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* العناصر العامة */
+* {
+  border-color: var(--border);
+  outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+}
+
+/* الكاردات */
+.card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.2);
+}
+
+/* فورمات الفلترة أو الإنبتات */
+input,
+select,
+textarea {
+  background-color: var(--input-bg);
+  color: var(--foreground);
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+/* الأزرار */
+button {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
 }

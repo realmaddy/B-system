@@ -1,0 +1,127 @@
+"use client";
+
+import { useState } from "react";
+import { Tv, Search, Globe2 } from "lucide-react";
+import Link from "next/link";
+
+export default function SeriesPage() {
+  const [search, setSearch] = useState("");
+
+  const series = [
+    { id: 1, language: "English", code: "EN", description: "View series in en" },
+    { id: 2, language: "Arabic", code: "AR", description: "View series in ar" },
+    { id: 3, language: "French", code: "FR", description: "View series in fr" },
+    { id: 4, language: "German", code: "DE", description: "View series in de" },
+    { id: 5, language: "Spanish", code: "ES", description: "View series in es" },
+    { id: 6, language: "Italian", code: "IT", description: "View series in it" },
+  ];
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-red-50 p-10">
+      {/* Header */}
+      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-800 flex items-center gap-2">
+            <Tv className="w-6 h-6 text-red-500" />
+            Choose Your Language
+          </h1>
+          <p className="text-sm text-gray-500 mt-2">
+            Select a language to browse series available in that language.
+          </p>
+        </div>
+
+        <Link
+          href="/series/create"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-rose-500 text-white text-sm font-medium px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all"
+        >
+          + Add Series
+        </Link>
+      </header>
+
+      {/* Search Bar */}
+      <section className="bg-white/80 backdrop-blur border border-gray-100 rounded-3xl shadow-lg p-8 space-y-8">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search Languages..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="appearance-none w-full pl-10 pr-3 py-2.5 text-sm rounded-md border border-gray-200 focus:ring-2 focus:ring-red-400 focus:border-transparent outline-none bg-white hover:shadow-sm transition"
+          />
+          <button
+            onClick={() => setSearch("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-red-500 hover:text-rose-600 transition"
+          >
+            Clear
+          </button>
+        </div>
+      </section>
+
+      {/* Series Languages */}
+      <section className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {series
+          .filter((s) =>
+            s.language.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((lang) => (
+            <div
+              key={lang.id}
+              className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-[2px] transition-all p-6 flex flex-col justify-between"
+            >
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  {lang.language}
+                </h3>
+                <p className="text-sm text-gray-500 mb-3">
+                  {lang.description}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center mt-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Globe2 className="w-4 h-4 text-red-400" />
+                  <span>View series in {lang.code.toLowerCase()}</span>
+                </div>
+                <Link
+                  href={`/series/${lang.language.toLowerCase()}`}
+                  className="text-xs font-medium text-red-600 hover:text-rose-600 transition flex items-center gap-1"
+                >
+                  → Select Language
+                </Link>
+              </div>
+
+              <div className="flex justify-end mt-3">
+                <span className="text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+                  {lang.code}
+                </span>
+              </div>
+            </div>
+          ))}
+      </section>
+
+      {/* Empty State */}
+      {series.filter((s) =>
+        s.language.toLowerCase().includes(search.toLowerCase())
+      ).length === 0 && (
+        <div className="flex flex-col items-center justify-center mt-20 space-y-4">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-rose-50">
+            <Tv className="w-8 h-8 text-red-500" />
+          </div>
+          <h3 className="text-gray-700 font-semibold text-lg">
+            No Series Found
+          </h3>
+          <p className="text-sm text-gray-500 text-center max-w-md">
+            Try adjusting your search or add a new series to the library.
+          </p>
+          <Link
+            href="/series/create"
+            className="bg-gradient-to-r from-red-600 to-rose-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg shadow hover:shadow-md hover:scale-[1.02] transition"
+          >
+            Add New Series
+          </Link>
+        </div>
+      )}
+    </main>
+  );
+}
